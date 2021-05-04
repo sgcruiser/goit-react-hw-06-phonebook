@@ -1,11 +1,12 @@
-import React from 'react';
+import React, { Component } from 'react';
 
-import { v4 as uuidv4 } from 'uuid';
+import { connect } from 'react-redux';
+import contactsActions from '../../redux/contacts/contacts-actions';
 
 import styles from './FormContacts.module.scss';
 
-class FormContacts extends React.Component {
-  static propTypes = {};
+class FormContacts extends Component {
+  // static propTypes = {};
 
   state = {
     name: '',
@@ -20,13 +21,7 @@ class FormContacts extends React.Component {
 
   handlSubmit = event => {
     event.preventDefault();
-    const newContact = {
-      id: uuidv4(),
-      name: this.state.name,
-      number: this.state.number,
-    };
-
-    this.props.onSubmit(newContact);
+    this.props.onSubmit(this.state);
     this.reset();
   };
 
@@ -35,6 +30,7 @@ class FormContacts extends React.Component {
   };
 
   render() {
+    const { name, number } = this.state;
     return (
       <form onSubmit={this.handlSubmit} className={styles.form}>
         <label className={styles.label}>
@@ -45,7 +41,7 @@ class FormContacts extends React.Component {
             pattern="^[a-zA-Zа-яА-Я]+(([' -][a-zA-Zа-яА-Я ])?[a-zA-Zа-яА-Я]*)*$"
             title="Имя может состоять только из букв, апострофа, тире и пробелов. Например Adrian, Jacob Mercer, Charles de Batz de Castelmore d'Artagnan и т. п."
             required
-            value={this.state.name}
+            value={name}
             onChange={this.handlChange}
           />
         </label>
@@ -58,7 +54,7 @@ class FormContacts extends React.Component {
             pattern="(\+?( |-|\.)?\d{1,2}( |-|\.)?)?(\(?\d{3}\)?|\d{3})( |-|\.)?(\d{3}( |-|\.)?\d{4})"
             title="Номер телефона должен состоять из 11-12 цифр и может содержать цифры, пробелы, тире, пузатые скобки и может начинаться с +"
             required
-            value={this.state.number}
+            value={number}
             onChange={this.handlChange}
           />
         </label>
@@ -71,4 +67,12 @@ class FormContacts extends React.Component {
   }
 }
 
-export default FormContacts;
+const mapStateToProps = state => ({
+  contacts: state.contacts.items,
+});
+
+const mapDispatchToProps = dispatch => ({
+  onSubmit: (name, number) =>
+    dispatch(contactsActions.handleContact(name, number)),
+});
+export default connect(mapStateToProps, mapDispatchToProps)(FormContacts);
