@@ -23,11 +23,6 @@ const SearchContacts = ({ label, value, onChange }) => {
   );
 };
 
-SearchContacts.propTypes = {
-  value: PropTypes.string.isRequired,
-  onChange: PropTypes.func.isRequired,
-};
-
 const mapStateToProps = state => ({
   value: state.contacts.filter,
 });
@@ -36,5 +31,10 @@ const mapDispatchToProps = dispatch => ({
   onChange: event =>
     dispatch(contactsActions.changeFilter(event.currentTarget.value)),
 });
+
+SearchContacts.propTypes = {
+  value: PropTypes.string.isRequired,
+  onChange: PropTypes.func.isRequired,
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(SearchContacts);
