@@ -6,17 +6,17 @@ import contactsActions from '../../redux/contacts/contacts-actions';
 import styles from './FormContacts.module.scss';
 
 class FormContacts extends Component {
-  // static propTypes = {};
-
   state = {
     name: '',
     number: '',
+    disabled: true,
   };
 
   handlChange = event => {
     const { name, value } = event.currentTarget;
+    console.log(event);
 
-    this.setState({ [name]: value });
+    this.setState({ [name]: value, disabled: false });
   };
 
   handlSubmit = event => {
@@ -26,11 +26,12 @@ class FormContacts extends Component {
   };
 
   reset = () => {
-    this.setState({ name: '', number: '' });
+    this.setState({ name: '', number: '', disabled: true });
   };
 
   render() {
-    const { name, number } = this.state;
+    const { name, number, disabled } = this.state;
+
     return (
       <form onSubmit={this.handlSubmit} className={styles.form}>
         <label className={styles.label}>
@@ -59,7 +60,7 @@ class FormContacts extends Component {
           />
         </label>
 
-        <button type="submit" className={styles.button}>
+        <button type="submit" disabled={disabled} className={styles.button}>
           Add contact
         </button>
       </form>
@@ -75,4 +76,5 @@ const mapDispatchToProps = dispatch => ({
   onSubmit: (name, number) =>
     dispatch(contactsActions.handleContact(name, number)),
 });
+
 export default connect(mapStateToProps, mapDispatchToProps)(FormContacts);

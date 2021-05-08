@@ -5,7 +5,9 @@ import styles from './Section.module.scss';
 const Section = props => {
   return (
     <section className={styles.section}>
-      {props.title && <span className={styles.title}>{props.title}</span>}
+      {props.title && (
+        <span className={styles.section__title}>{props.title}</span>
+      )}
       {props.children}
     </section>
   );
